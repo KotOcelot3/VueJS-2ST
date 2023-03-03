@@ -44,24 +44,22 @@ Vue.component('column', {
             }
         })
         eventBus.$on('addColumn_3', ColumnCard => {
-            //         this.column_3.push(ColumnCard)
-            //         this.column_2.splice(this.column_2.indexOf(ColumnCard), 1)
-            //     })
-            //     eventBus.$on('addColumn1-3', ColumnCard => {
-            //         this.column_3.push(ColumnCard)
-            //         this.column_1.splice(this.column_1.indexOf(ColumnCard), 1)
-            //     })
-            // }
-            if (this.column_2.length === 5) {
-                this.errors.length = 0
-                this.column_3.push(ColumnCard)
-                this.column_2.splice(this.column_2.indexOf(ColumnCard), 1)
-            } else {
-                this.errors.length = 0
-                this.errors.push('Превышено число заметок в столбце')
+                    this.column_3.push(ColumnCard)
+                    this.column_2.splice(this.column_2.indexOf(ColumnCard), 1)
+                })
+                eventBus.$on('addColumn1-3', ColumnCard => {
+                    this.column_3.push(ColumnCard)
+                    this.column_1.splice(this.column_1.indexOf(ColumnCard), 1)
+                })
             }
-        })
-    }
+            // if (this.column_2.length === 5) {
+            //     this.errors.length = 0
+            //     this.column_3.push(ColumnCard)
+            //     this.column_2.splice(this.column_2.indexOf(ColumnCard), 1)
+            // } else {
+            //     this.errors.length = 0
+            //     this.errors.push('Превышено число заметок в столбце')
+            // }
 })
 
 Vue.component('newCard', {
@@ -199,25 +197,40 @@ Vue.component('column_1', {
         changeCompleted(ColumnCard, task) {
             task.completed = true
             ColumnCard.status += 1
-            let count = 0
-            for(let i = 0; i < 5; i++) {
-                if (ColumnCard.points[i].title != null) {
-                    count++
-                }
-            }
-            console.log(ColumnCard.status)
-            console.log(count)
-            if ((ColumnCard.status / count) * 100 >= 50) {
+            console.log("Проверочка" + ColumnCard.status)
+            if (ColumnCard.status === 2 && !this.point_2 && !this.point_3) {
+                console.log("1" + ColumnCard.status)
                 eventBus.$emit('addColumn_2', ColumnCard)
+                this.column_1.splice(this.column_1.indexOf(ColumnCard), 1)
+            } else if ( ColumnCard.status === 3 && this.point_5 && this.point_4) {
+                console.log("2 " + ColumnCard.status)
+                eventBus.$emit('addColumn_2', ColumnCard)
+                this.column_1.splice(this.column_1.indexOf(ColumnCard), 1)
             }
-            if ((ColumnCard.status / count) * 100 === 100) {
-                ColumnCard.date = new Date().toLocaleString()
-                // eventBus.$emit('addColumn1-3', ColumnCard)
-            }
-
         },
     },
 })
+//         changeCompleted(card, task) {
+//             task.completed = true
+//             card.status += 1
+//             let count = 0
+//             for(let i = 1; i < 5; i++){
+//                 if (card.points[i].title != null) {
+//                     count++
+//                 }
+//             }
+//             console.log(card.status)
+//             console.log(count)
+//             if ((card.status / count) * 100 >= 50) {
+//                 eventBus.$emit('addColumn_2', card)
+//             }
+//             if ((card.status / count) * 100 === 100) {
+//                 card.date = new Date().toLocaleString()
+//                 eventBus.$emit('addColumn_3', card)
+//             }
+//         },
+//     },
+// })
 
 Vue.component('column_2', {
     template: `
