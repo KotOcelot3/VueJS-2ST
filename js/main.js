@@ -77,7 +77,7 @@ Vue.component('newCard', {
         <div class="form__control">
                 
             <div class="form__name">
-                <input required type="text" id="name" style="color: #E55A3C" placeholder="Введите название заметки"/>
+                <input required type="text"  v-model="name" id="name" style="color: #E55A3C" placeholder="Введите название заметки"/>
             </div>
             
             <input required type="text" style="color: #E55A3C" v-model="point_1" placeholder="Первый пункт"/>
@@ -85,26 +85,12 @@ Vue.component('newCard', {
             <input required type="text" style="color: #E55A3C" v-model="point_2" placeholder="Второй пункт"/>
 
             <input required type="text" style="color: #E55A3C" v-model="point_3" placeholder="Третий пункт"/> 
-            <br>
-            <input type="text" style="color: #E55A3C" v-model="point_4"  placeholder="Четвертый пункт" v-show ="note4">
-            <br>
-             <input type="text" style="color: #E55A3C" v-model="point_5"  placeholder="Пятый пункт" v-show="note5">
+            
+            <input type="text" style="color: #E55A3C" v-model="point_4"  placeholder="Четвертый пункт"/>
+            
+             <input type="text" style="color: #E55A3C" v-model="point_5"  placeholder="Пятый пункт"/>
 
         </div>
-       <div class="plus_minus_p">
-            <p style="color:#E55A3C">Добавить/удалить поле для заметки</p>
-            </div>
-            <div class="minus_plus">
-                 
-                   <p class="plus">
-                        <button type='button' @click="addField"> + </button>
-                   </p>
-                   
-                   <p class="minus">
-                        <button type='button' @click="removeField"> - </button>
-                   </p>
-            </div>
-            
             <div>                    
                 <p class="sub">
                         <input type="submit" value="Отправить"> 
@@ -186,7 +172,7 @@ Vue.component('column_1', {
         <section id="main" class="main-alt">
             <div class="column column__one">
                 <div class="card" v-for="card in column_1">
-                <h3>>{{ card.name }}</h3>
+                <h3>{{ card.name }}</h3>
                     <div class="tasks" v-for="task in card.points"
                         v-if="task.name != null"
                         @click="changeCompleted(card, task)"
@@ -272,7 +258,8 @@ Vue.component('column_3', {
     template: `
         <section id="main" class="main-alt">
             <div class="column column__three">
-                <div class="card" v-for="card in column_3"><p>{{ card.name }}</p>
+                <div class="card" v-for="card in column_3">
+                <h3>{{ card.name }}</h3>
                     <div class="tasks" v-for="task in card.points"
                         v-if="task.name != null"
                         @click="changeCompleted(card, task)"
