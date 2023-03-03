@@ -29,27 +29,29 @@ Vue.component('column', {
             if (this.column_1.length < 3) {
                 this.column_1.push(ColumnCard)
             } else {
+                this.errors.length = 0
                 this.errors.push('макс коллво заметок в 1 столбце')
             }
-                })
+        })
 
         eventBus.$on('addColumn_2', ColumnCard => {
             if (this.column_2.length < 5) {
                 this.column_2.push(ColumnCard)
                 this.column_1.splice(this.column_1.indexOf(ColumnCard), 1)
             } else {
+                this.errors.length = 0
                 this.errors.push('Вы не можете редактировать первую колонку, пока во второй есть 5 карточек.')
             }
         })
         eventBus.$on('addColumn_3', ColumnCard => {
-    //         this.column_3.push(ColumnCard)
-    //         this.column_2.splice(this.column_2.indexOf(ColumnCard), 1)
-    //     })
-    //     eventBus.$on('addColumn1-3', ColumnCard => {
-    //         this.column_3.push(ColumnCard)
-    //         this.column_1.splice(this.column_1.indexOf(ColumnCard), 1)
-    //     })
-    // }
+            //         this.column_3.push(ColumnCard)
+            //         this.column_2.splice(this.column_2.indexOf(ColumnCard), 1)
+            //     })
+            //     eventBus.$on('addColumn1-3', ColumnCard => {
+            //         this.column_3.push(ColumnCard)
+            //         this.column_1.splice(this.column_1.indexOf(ColumnCard), 1)
+            //     })
+            // }
             if (this.column_2.length === 5) {
                 this.errors.length = 0
                 this.column_3.push(ColumnCard)
@@ -63,7 +65,7 @@ Vue.component('column', {
 })
 
 Vue.component('newCard', {
-        template: `
+    template: `
     <section id="main" class="main-alt">
     
         <form class="row" @submit.prevent="Submit">
@@ -97,67 +99,67 @@ Vue.component('newCard', {
         </form>
     </section>
     `,
-        data() {
-            return {
-                note4: false,
-                note5: false,
-                name: null,
-                point_1: null,
-                point_2: null,
-                point_3: null,
-                point_4: null,
-                point_5: null,
-                date: null,
+    data() {
+        return {
+            note4: false,
+            note5: false,
+            name: null,
+            point_1: null,
+            point_2: null,
+            point_3: null,
+            point_4: null,
+            point_5: null,
+            date: null,
+        }
+    },
+    methods: {
+        addField() {
+            if (this.note4 === false) {
+                console.log('1')
+                return this.note4 = true
+            } else {
+                console.log('2')
+                return this.note5 = true
             }
+
         },
-        methods: {
-            addField() {
-                if (this.note4 === false) {
-                    console.log('1')
-                    return this.note4 = true
-                } else {
-                    console.log('2')
-                    return this.note5 = true
-                }
+        removeField() {
 
-            },
-            removeField() {
-
-                if (this.note5 === true) {
-                    return this.note5 = false
-                }
-
-                if (this.note4 === true) {
-                    return this.note4 = false
-                }
-
-
-            },
-
-            Submit() {
-                    let card = {
-                        name: this.name,
-                        points: [
-                            {name: this.point_1, completed: false},
-                            {name: this.point_2, completed: false},
-                            {name: this.point_3, completed: false},
-                            {name: this.point_4, completed: false},
-                            {name: this.point_5, completed: false}
-                        ],
-                        date: null,
-                        // date: null,
-                        status: 0,
-                        errors: [],
-                    }
-                    eventBus.$emit('addColumn_1', card)
-                    this.name = null;
-                    this.point_1 = null
-                    this.point_2 = null
-                    this.point_3 = null
-                    this.point_4 = null
-                    this.point_5 = null
-                }
+            if (this.note5 === true) {
+                return this.note5 = false
             }
+
+            if (this.note4 === true) {
+                return this.note4 = false
+            }
+
+
+        },
+
+        Submit() {
+            let card = {
+                name: this.name,
+                points: [
+                    {name: this.point_1, completed: false},
+                    {name: this.point_2, completed: false},
+                    {name: this.point_3, completed: false},
+                    {name: this.point_4, completed: false},
+                    {name: this.point_5, completed: false}
+                ],
+                date: null,
+                // date: null,
+                status: 0,
+                errors: [],
+            }
+            eventBus.$emit('addColumn_1', card)
+            this.name = null;
+            this.point_1 = null
+            this.point_2 = null
+            this.point_3 = null
+            this.point_4 = null
+            this.point_5 = null
+        }
+    }
 
 })
 
@@ -210,7 +212,7 @@ Vue.component('column_1', {
             }
             if ((ColumnCard.status / count) * 100 === 100) {
                 ColumnCard.date = new Date().toLocaleString()
-                eventBus.$emit('addColumn1-3', ColumnCard)
+                // eventBus.$emit('addColumn1-3', ColumnCard)
             }
 
         },
@@ -243,10 +245,10 @@ Vue.component('column_2', {
         },
     },
     methods: {
-        changeCompleted(card, task) {
-                eventBus.$emit('addColumn_3', card)
-            }
+        changeCompleted(card) {
+            eventBus.$emit('addColumn_3', card)
         }
+    }
 
 })
 

@@ -75,37 +75,6 @@ body {
     margin-bottom: 25px;
 }
 
-.minus_plus {
-    display: flex;
-    justify-content: center;
-}
-.minus_plus  {
-    display: flex;
-    justify-content: center;
-
-    padding: 10px;
-}
-.plus_minus_p {
-    display: flex;
-    justify-content: center;
-}
-.minus button[type="button" ]{
-    display: flex;
-    justify-content: center;
-    margin: 20px;
-    color: #E55A3C;
-    background: #7E41EA;
-    padding: 10px;
-}
-.plus button[type="button" ] {
-    display: flex;
-    justify-content: center;
-    margin: 20px;
-    color: #E55A3C;
-    background: #7E41EA;
-    padding: 10px;
-}
-
 .sub {
     display: flex;
     justify-content: center;
@@ -120,4 +89,8 @@ body {
     border-radius: 10px;
     font-size: 15px;
 
+}
+
+.completed{
+    text-decoration: line-through;
 }
