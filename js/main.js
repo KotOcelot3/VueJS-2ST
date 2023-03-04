@@ -3,16 +3,14 @@ let eventBus = new Vue()
 Vue.component('column', {
     // колонки
     template: `
- <section id="main" class="main-alt">
  
         <div class="columns">
             <newCard></newCard>
-          <p class="error" v-for="error in errors">{{ error }}</p>
+        <p class="error" v-for="error in errors">{{ error }}</p>
                 <column_1 :column_1="column_1"></column_1>
                 <column_2 :column_2="column_2"></column_2>
                 <column_3 :column_3="column_3"></column_3>
             </div>
- </section>
     `,
     data() {
         return {
@@ -23,19 +21,19 @@ Vue.component('column', {
         }
     },
     mounted() {
-        // создание заметки
         eventBus.$on('addColumn_1', ColumnCard => {
-            this.errors = []
+
             if (this.column_1.length < 3) {
+                this.errors.length = 0
                 this.column_1.push(ColumnCard)
             } else {
                 this.errors.length = 0
                 this.errors.push('макс коллво заметок в 1 столбце')
             }
         })
-
         eventBus.$on('addColumn_2', ColumnCard => {
             if (this.column_2.length < 5) {
+                this.errors.length = 0
                 this.column_2.push(ColumnCard)
                 this.column_1.splice(this.column_1.indexOf(ColumnCard), 1)
             } else {
@@ -44,22 +42,12 @@ Vue.component('column', {
             }
         })
         eventBus.$on('addColumn_3', ColumnCard => {
-                    this.column_3.push(ColumnCard)
-                    this.column_2.splice(this.column_2.indexOf(ColumnCard), 1)
-                })
-                eventBus.$on('addColumn1-3', ColumnCard => {
-                    this.column_3.push(ColumnCard)
-                    this.column_1.splice(this.column_1.indexOf(ColumnCard), 1)
-                })
-            }
-            // if (this.column_2.length === 5) {
-            //     this.errors.length = 0
-            //     this.column_3.push(ColumnCard)
-            //     this.column_2.splice(this.column_2.indexOf(ColumnCard), 1)
-            // } else {
-            //     this.errors.length = 0
-            //     this.errors.push('Превышено число заметок в столбце')
-            // }
+            this.column_3.push(ColumnCard)
+            this.column_2.splice(this.column_2.indexOf(ColumnCard), 1)
+
+        })
+
+    }
 })
 
 Vue.component('newCard', {
@@ -68,39 +56,33 @@ Vue.component('newCard', {
     
         <form class="row" @submit.prevent="Submit">
         
-            <p class="main__text">Заметки</p>
-            <p class="error" v-for="error in errors">{{ error }}</p>
-        <div class="form__control">
+            <p class="main_text">Заметки</p>
+        <div class="form_control">
                 
-            <div class="form__name">
-                <input required type="text"  v-model="name" id="name" style="color: #E55A3C" placeholder="Введите название заметки"/>
+            <div class="form_name">
+                <input required type="text" v-model="name" id="name" placeholder="Введите название заметки"/>
             </div>
             
-            <input required type="text" style="color: #E55A3C" v-model="point_1" placeholder="Первый пункт"/>
+            <input required type="text"  v-model="point_1" placeholder="Первый пункт"/>
 
-            <input required type="text" style="color: #E55A3C" v-model="point_2" placeholder="Второй пункт"/>
+            <input required type="text"  v-model="point_2" placeholder="Второй пункт"/>
 
-            <input required type="text" style="color: #E55A3C" v-model="point_3" placeholder="Третий пункт"/> 
-            
-            <input type="text" style="color: #E55A3C" v-model="point_4"  placeholder="Четвертый пункт"/>
-            
-             <input type="text" style="color: #E55A3C" v-model="point_5"  placeholder="Пятый пункт"/>
-
+            <input required type="text"  v-model="point_3" placeholder="Третий пункт"/> 
+            <br>
+            <input type="text"  v-model="point_4"  placeholder="Четвертый пункт"/>
+            <br>
+             <input type="text" v-model="point_5"  placeholder="Пятый пункт"/>
         </div>
-            <div>                    
+        <div>                    
                 <p class="sub">
                         <input type="submit" value="Отправить"> 
                 </p>
-            </div>
-            <div class="form__control">
             </div>
         </form>
     </section>
     `,
     data() {
         return {
-            note4: false,
-            note5: false,
             name: null,
             point_1: null,
             point_2: null,
@@ -111,28 +93,6 @@ Vue.component('newCard', {
         }
     },
     methods: {
-        addField() {
-            if (this.note4 === false) {
-                console.log('1')
-                return this.note4 = true
-            } else {
-                console.log('2')
-                return this.note5 = true
-            }
-
-        },
-        removeField() {
-
-            if (this.note5 === true) {
-                return this.note5 = false
-            }
-
-            if (this.note4 === true) {
-                return this.note4 = false
-            }
-
-
-        },
 
         Submit() {
             let card = {
@@ -161,17 +121,15 @@ Vue.component('newCard', {
 
 })
 
-
-
 Vue.component('column_1', {
     template: `
         <section id="main" class="main-alt">
-            <div class="column column__one">
+            <div class="column column_one">
                 <div class="card" v-for="card in column_1">
                 <h3>{{ card.name }}</h3>
                     <div class="tasks" v-for="task in card.points"
                         v-if="task.name != null"
-                        @click="changeCompleted(card, task)"
+                        @click="TaskCompleted(card, task)"
                         :class="{completed: task.completed}">
                         {{ task.name }}
                     </div>
@@ -191,42 +149,36 @@ Vue.component('column_1', {
         },
         errors: {
             type: Array,
-        }
+        },
     },
     methods: {
-        changeCompleted(ColumnCard, task) {
+        TaskCompleted(ColumnCard, task) {
             task.completed = true
-            ColumnCard.status += 1
-            console.log("Проверочка" + ColumnCard.status)
-            if (ColumnCard.status === 2 && !this.point_2 && !this.point_3) {
-                console.log("1" + ColumnCard.status)
-                eventBus.$emit('addColumn_2', ColumnCard)
-                this.column_1.splice(this.column_1.indexOf(ColumnCard), 1)
-            } else if ( ColumnCard.status === 3 && this.point_5 && this.point_4) {
-                console.log("2 " + ColumnCard.status)
+            ColumnCard.status += 3
+            let count = 0
+            if ((ColumnCard.status / count) * 100 >= 50) {
                 eventBus.$emit('addColumn_2', ColumnCard)
                 this.column_1.splice(this.column_1.indexOf(ColumnCard), 1)
             }
-        },
+            if ((ColumnCard.status / count) * 100 === 100) {
+                eventBus.$emit('addColumn1-3', ColumnCard)
+            }
+
+        }
     },
 })
-//         changeCompleted(card, task) {
+//         TaskCompleted(ColumnCard, task) {
 //             task.completed = true
-//             card.status += 1
-//             let count = 0
-//             for(let i = 1; i < 5; i++){
-//                 if (card.points[i].title != null) {
-//                     count++
-//                 }
-//             }
-//             console.log(card.status)
-//             console.log(count)
-//             if ((card.status / count) * 100 >= 50) {
-//                 eventBus.$emit('addColumn_2', card)
-//             }
-//             if ((card.status / count) * 100 === 100) {
-//                 card.date = new Date().toLocaleString()
-//                 eventBus.$emit('addColumn_3', card)
+//             ColumnCard.status += 1
+//             console.log("Проверочка" + ColumnCard.status)
+//             if (ColumnCard.status === 3 && !this.point_5 && !this.point_4) {
+//                 console.log("1" + ColumnCard.status)
+//                 eventBus.$emit('addColumn_2', ColumnCard)
+//                 this.column_1.splice(this.column_1.indexOf(ColumnCard), 1)
+//             } else if ( ColumnCard.status === 3 && this.point_5 && this.point_4) {
+//                 console.log("2 " + ColumnCard.status)
+//                 eventBus.$emit('addColumn_2', ColumnCard)
+//                 this.column_1.splice(this.column_1.indexOf(ColumnCard), 1)
 //             }
 //         },
 //     },
@@ -235,12 +187,12 @@ Vue.component('column_1', {
 Vue.component('column_2', {
     template: `
         <section id="main" class="main-alt">
-            <div class="column column__two">
+            <div class="column column_two">
                 <div class="card" v-for="card in column_2">
                 <h3>{{ card.name }}</h3>
                     <div class="tasks" v-for="task in card.points"
                         v-if="task.name != null"
-                        @click="changeCompleted(card, task)"
+                        @click="TaskCompleted(card, task)"
                         :class="{completed: task.completed}">
                         {{ task.name }}
                     </div>
@@ -252,28 +204,37 @@ Vue.component('column_2', {
         column_2: {
             type: Array,
         },
-
         card: {
             type: Object,
         },
     },
     methods: {
-        changeCompleted(card) {
-            eventBus.$emit('addColumn_3', card)
+        TaskCompleted(ColumnCard, task) {
+            task.completed = true
+            ColumnCard.status += 1
+            let count = 0
+            for(let i = 0; i < 5; i++){
+                count++
+            }
+            if (( ColumnCard.status / count) * 100 >= 100) {
+                eventBus.$emit('addColumn_3', ColumnCard)
+                ColumnCard.date = new Date().toLocaleString()
+                this.column_2.splice(this.column_2.indexOf(ColumnCard), 1)
+
+            }
         }
     }
-
 })
 
 Vue.component('column_3', {
     template: `
         <section id="main" class="main-alt">
-            <div class="column column__three">
+            <div class="column column_three">
                 <div class="card" v-for="card in column_3">
                 <h3>{{ card.name }}</h3>
                     <div class="tasks" v-for="task in card.points"
                         v-if="task.name != null"
-                        @click="changeCompleted(card, task)"
+                        @click="TaskCompleted(card, task)"
                         :class="{completed: task.completed}">
                         {{ task.name }}
                     </div>
