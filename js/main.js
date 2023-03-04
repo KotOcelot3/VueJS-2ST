@@ -68,10 +68,10 @@ Vue.component('newCard', {
             <input required type="text"  v-model="point_2" placeholder="Второй пункт"/>
 
             <input required type="text"  v-model="point_3" placeholder="Третий пункт"/> 
-            <br>
-            <input type="text"  v-model="point_4"  placeholder="Четвертый пункт"/>
-            <br>
-             <input type="text" v-model="point_5"  placeholder="Пятый пункт"/>
+
+            <input required type="text"  v-model="point_4"  placeholder="Четвертый пункт"/>
+
+             <input required type="text" v-model="point_5"  placeholder="Пятый пункт"/>
         </div>
         <div>                    
                 <p class="sub">
@@ -155,35 +155,14 @@ Vue.component('column_1', {
         TaskCompleted(ColumnCard, task) {
             task.completed = true
             ColumnCard.status += 1
-            let count = 0
-            for(let i = 0; i < 3; i++){
-                count++
-            }
-            if (( ColumnCard.status / count) * 100 >= 100) {
+            console.log("Проверочка" + ColumnCard.status)
+             if (ColumnCard.status === 3 && !this.point_5 && !this.point_4) {
+                console.log("1" + ColumnCard.status)
                 eventBus.$emit('addColumn_2', ColumnCard)
-                ColumnCard.date = new Date().toLocaleString()
-                this.column_2.splice(this.column_2.indexOf(ColumnCard), 1)
-
             }
-        }
-    }
+        },
+    },
 })
-//         TaskCompleted(ColumnCard, task) {
-//             task.completed = true
-//             ColumnCard.status += 1
-//             console.log("Проверочка" + ColumnCard.status)
-//             if (ColumnCard.status === 3 && !this.point_5 && !this.point_4) {
-//                 console.log("1" + ColumnCard.status)
-//                 eventBus.$emit('addColumn_2', ColumnCard)
-//                 this.column_1.splice(this.column_1.indexOf(ColumnCard), 1)
-//             } else if ( ColumnCard.status === 3 && this.point_5 && this.point_4) {
-//                 console.log("2 " + ColumnCard.status)
-//                 eventBus.$emit('addColumn_2', ColumnCard)
-//                 this.column_1.splice(this.column_1.indexOf(ColumnCard), 1)
-//             }
-//         },
-//     },
-// })
 
 Vue.component('column_2', {
     template: `
@@ -220,8 +199,6 @@ Vue.component('column_2', {
             if (( ColumnCard.status / count) * 100 >= 100) {
                 eventBus.$emit('addColumn_3', ColumnCard)
                 ColumnCard.date = new Date().toLocaleString()
-                this.column_2.splice(this.column_2.indexOf(ColumnCard), 1)
-
             }
         }
     }
