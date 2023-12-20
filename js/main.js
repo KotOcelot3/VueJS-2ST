@@ -128,8 +128,7 @@ Vue.component('column_1', {
                 <div class="card" v-for="card in column_1">
                 <h3>{{ card.name }}</h3>
                     <div class="tasks" v-for="task in card.points"
-                        v-if="task.name != null"
-                        @click="TaskCompleted(card, task)"
+                    @click="TaskCompleted(card, task)"
                         :class="{completed: task.completed}">
                         {{ task.name }}
                     </div>
@@ -155,11 +154,17 @@ Vue.component('column_1', {
         TaskCompleted(ColumnCard, task) {
             task.completed = true
             ColumnCard.status += 1
-            console.log("Проверочка" + ColumnCard.status)
-             if (ColumnCard.status === 3 && !this.point_5 && !this.point_4) {
-                console.log("1" + ColumnCard.status)
+             if (ColumnCard.status === 3) {
                 eventBus.$emit('addColumn_2', ColumnCard)
             }
+            else if (ColumnCard.status > 3){
+                ColumnCard.status = 0
+                this.column_1.forEach(items => {
+                        items.points.forEach(items => {
+                            items.completed = false;
+                        })
+                    })
+             }
         },
     },
 })
