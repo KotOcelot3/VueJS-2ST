@@ -16,13 +16,13 @@ Vue.component('column', {
         return {
             column_1: [],
             column_2: [],
-            column_3: [],
+            column_3: [], 
             errors: [],
         }
     },
     mounted() {
 
-         if ((JSON.parse(localStorage.getItem("column_1")) != null)){
+        if ((JSON.parse(localStorage.getItem("column_1")) != null)){
             this.column_1 = JSON.parse(localStorage.getItem("column_1"))
         }
         if ((JSON.parse(localStorage.getItem("column_2")) != null)){
@@ -35,7 +35,6 @@ Vue.component('column', {
         eventBus.$on('addColumn_1', ColumnCard => {
 
             if (this.column_1.length < 3) {
-                JSON.parse(localStorage.getItem('column1'))
                 this.errors.length = 0
                 this.column_1.push(ColumnCard)
                 localStorage.setItem('column_1', JSON.stringify(this.column_1))
@@ -46,26 +45,24 @@ Vue.component('column', {
         })
         eventBus.$on('addColumn_2', ColumnCard => {
             if (this.column_2.length < 5) {
-                JSON.parse(localStorage.getItem("column_1"))
                 this.errors.length = 0
                 this.column_2.push(ColumnCard)
                 this.column_1.splice(this.column_1.indexOf(ColumnCard), 1)
-                localStorage.setItem('column_2', JSON.stringify(this.column_2))
                 localStorage.setItem('column_1', JSON.stringify(this.column_1))
+                localStorage.setItem('column_2', JSON.stringify(this.column_2))
             } else {
                 this.errors.length = 0
                 this.errors.push('Вы не можете редактировать первую колонку, пока во второй есть 5 карточек.')
             }
-            eventBus.$on('addColumn_3', ColumnCard => {
-                JSON.parse(localStorage.getItem('column_3'))
-                JSON.parse(localStorage.getItem('column_2'))
-                this.column_3.push(ColumnCard)
-                this.column_2.splice(this.column_2.indexOf(ColumnCard), 1)
-                localStorage.setItem('column_2', JSON.stringify(this.column_2))
-                localStorage.setItem('column_3', JSON.stringify(this.column_3))
-
-            })
         })
+        eventBus.$on('addColumn_3', ColumnCard => {
+            JSON.parse(localStorage.getItem('column_2'))
+            this.column_3.push(ColumnCard)
+            this.column_2.splice(this.column_2.indexOf(ColumnCard), 1)
+            localStorage.setItem('column_2', JSON.stringify(this.column_2))
+            localStorage.setItem('column_3', JSON.stringify(this.column_3))
+        })
+
     }
 })
 
@@ -186,7 +183,6 @@ Vue.component('column_1', {
                         })
                     })
              }
-
         },
     },
 })
@@ -221,12 +217,16 @@ Vue.component('column_2', {
             task.completed = true
             ColumnCard.status += 1
             localStorage.setItem('column_2', JSON.stringify(this.column_2))
-             if (ColumnCard.status === 5) {
-                eventBus.$emit('addColumn_3', ColumnCard)
+            let count = 0
+            for(let i = 0; i < 5; i++){
+                count++
             }
-
-        },
-    },
+            if (( ColumnCard.status / count) * 100 >= 100) {
+                eventBus.$emit('addColumn_3', ColumnCard)
+                ColumnCard.date = new Date().toLocaleString()
+            }
+        }
+    }
 })
 
 Vue.component('column_3', {
@@ -257,6 +257,10 @@ Vue.component('column_3', {
 })
 
 
+
+let app = new Vue({
+    el: '#app',
+})
 
 let app = new Vue({
     el: '#app',
